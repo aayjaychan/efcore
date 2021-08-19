@@ -8154,6 +8154,16 @@ END AS [IsOfficer]
 FROM [Gears] AS [g]");
         }
 
+        public override async Task Comparison_with_value_converted_subclass(bool async)
+        {
+            await base.Comparison_with_value_converted_subclass(async);
+
+            AssertSql(
+                @"SELECT [f].[Id], [f].[CapitalName], [f].[Discriminator], [f].[Name], [f].[ServerAddress], [f].[CommanderName], [f].[Eradicated]
+FROM [Factions] AS [f]
+WHERE [f].[ServerAddress] = CAST(N'127.0.0.1' AS nvarchar(45))");
+        }
+
         private void AssertSql(params string[] expected)
             => Fixture.TestSqlLoggerFactory.AssertBaseline(expected);
     }
